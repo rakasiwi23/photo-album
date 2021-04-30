@@ -1,0 +1,25 @@
+.main {
+  background-color: bisque;
+  padding: 16px;
+}
+
+.main ul {
+  list-style: none;
+  padding: 0;
+  margin: 48px 0 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 36px;
+}
+.main ul li {
+  display: flex;
+  flex-direction: column;
+}
+.main ul li img {
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.main ul li a {
+  text-align: center;
+  text-transform: capitalize;
+}
