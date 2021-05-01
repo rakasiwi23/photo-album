@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import ReactDOM from "react-dom";
 import { useQueries } from "react-query";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { httpRequest } from "./utils/api";
-import { Album, User, Photo } from "./common/types";
+import { httpRequest } from "./utils";
+import { Album, User, Photo, PhotoComment } from "./common/types";
 import { Main } from "./pages/Main";
+import { Albums } from "./pages/Albums";
+import { UserInfo } from "./pages/UserInfo";
+import { FavoritePhotos } from "./pages/FavoritePhotos";
+
 import "./assets/styles/index.css";
 import reportWebVitals from "./reportWebVitals";
-import { Albums } from "./pages/Albums";
 
 const queryClient = new QueryClient();
 
@@ -29,11 +32,71 @@ function Index() {
     },
     {
       queryKey: "photos",
-      queryFn: () => httpRequest("photos"),
+      queryFn: async () => {
+        const photos = await httpRequest("photos");
+        return (photos as Photo[]).map((photo) => ({
+          ...photo,
+          // Initialize all photo 'favorite' property value to 'false'.
+          isFavorite: false,
+        }));
+      },
       refetchOnWindowFocus: false,
       initialData: [],
     },
   ]);
+  const [favoritePhotos, setFavoritePhotos] = useState<number[]>([]);
+  const [commentedPhotos, setCommentedPhotos] = useState<PhotoComment[]>([]);
+
+  const photos: Photo[] = useMemo(() => {
+    const finalPhotos: Photo[] = [...(photosRes.data as Photo[])];
+
+    for (const photoId of favoritePhotos) {
+      const index = finalPhotos.findIndex((photo) => photo.id === photoId);
+      if (index > -1) {
+        finalPhotos.splice(index, 1, {
+          ...finalPhotos[index],
+          isFavorite: !finalPhotos[index].isFavorite,
+        });
+      }
+    }
+
+    return finalPhotos;
+  }, [photosRes.data, favoritePhotos]);
+
+  const onSetFavoritePhoto = (photoId: number) => {
+    setFavoritePhotos((prev) => {
+      const newFavoritedPhotos = [...prev];
+      const index = newFavoritedPhotos.findIndex((el) => el === photoId);
+
+      if (index > -1) {
+        newFavoritedPhotos.splice(index, 1);
+      } else {
+        newFavoritedPhotos.push(photoId);
+      }
+
+      return newFavoritedPhotos;
+    });
+  };
+
+  const onAddComment = (photoId: number, comment: string) => {
+    setCommentedPhotos((prev) => {
+      const newCommentedPhotos = [...prev];
+      const index = newCommentedPhotos.findIndex(
+        (el) => el.photoId === photoId,
+      );
+
+      if (index > -1) {
+        newCommentedPhotos[index].comments.push(comment);
+      } else {
+        newCommentedPhotos.push({
+          photoId,
+          comments: [comment],
+        });
+      }
+
+      return newCommentedPhotos;
+    });
+  };
 
   const isError =
     albumsRes.status === "error" ||
@@ -45,24 +108,39 @@ function Index() {
 
   return (
     <Router>
+      <div>
+        <Link to="/favorite-photos">My Favorite Photos</Link>
+      </div>
+
       <Switch>
         <Route exact path="/">
           <Main
             albums={albumsRes.data as Album[]}
             users={usersRes.data as User[]}
-            photos={photosRes.data as Photo[]}
+            photos={photos}
             isFetching={isFetching}
             isError={isError}
           />
         </Route>
-        <Route exact path="/albums/:album">
-          <Albums />
+        <Route exact path="/albums/:albumId">
+          <Albums
+            photos={photos}
+            commentedPhotos={commentedPhotos}
+            users={usersRes.data as User[]}
+            isFetching={isFetching}
+            isError={isError}
+            onSetFavoritePhoto={onSetFavoritePhoto}
+            onAddComment={onAddComment}
+          />
         </Route>
-        <Route exact path="/users/:user">
-          <div>Users goes here...</div>
+        <Route exact path="/users/:userId">
+          <UserInfo
+            users={usersRes.data as User[]}
+            albums={albumsRes.data as Album[]}
+          />
         </Route>
-        <Route exact path="/photos/:photo">
-          <div>Photos goes here...</div>
+        <Route exact path="/favorite-photos">
+          <FavoritePhotos albums={albumsRes.data as Album[]} photos={photos} />
         </Route>
       </Switch>
     </Router>

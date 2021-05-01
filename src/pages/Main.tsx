@@ -2,29 +2,25 @@ import { useMemo, useState, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 
 import { Album, User, Photo } from "../common/types";
+import { Error } from "../components/Error";
 import "../assets/styles/main.css";
 
 type ListAlbum = {
   albumId: number;
   name: string;
+  userId: number;
   user: string;
   thumbnail: string;
 };
 
-type MainProps = {
+type Props = {
   albums: Album[];
   users: User[];
   photos: Photo[];
   isFetching: boolean;
   isError: boolean;
 };
-export function Main({
-  albums,
-  users,
-  photos,
-  isFetching,
-  isError,
-}: MainProps) {
+export function Main({ albums, users, photos, isFetching, isError }: Props) {
   const [filterText, setFilterText] = useState<string>("");
 
   const initialAlbums: ListAlbum[] = useMemo(() => {
@@ -36,8 +32,10 @@ export function Main({
           result.push({
             albumId: album.id,
             name: album.title,
+            userId: user.id,
             user: user.name,
             thumbnail:
+              // We just need one of photos thumbnail.
               photos.find((el) => el.albumId === album.id)?.thumbnailUrl || "",
           });
         }
@@ -57,7 +55,7 @@ export function Main({
   };
 
   if (isError) {
-    return <div>Something went wrong!</div>;
+    <Error />;
   }
 
   return (
@@ -77,16 +75,20 @@ export function Main({
           {filteredAlbum.map((album, idx) => (
             <li key={idx}>
               <img src={album.thumbnail} alt={album.name} />
-              <Link
-                to={`/albums/${album.name}?id=${album.albumId}&user=${album.user}`}
-              >
+
+              <div>
                 Album Name:
-                <br /> {album.name}
-              </Link>
-              <a href={`/users/${album.user}`}>
+                <br />
+                <Link to={`/albums/${album.albumId}?user=${album.user}`}>
+                  {album.name}
+                </Link>
+              </div>
+
+              <div>
                 User Name:
-                <br /> {album.user}
-              </a>
+                <br />
+                <Link to={`/users/${album.userId}`}>{album.user}</Link>
+              </div>
             </li>
           ))}
         </ul>
@@ -95,6 +97,7 @@ export function Main({
   );
 }
 
+// Helper.
 const filterAlbums = (albums: ListAlbum[], filterText: string = "") => {
   return albums.filter((el) => {
     return (
