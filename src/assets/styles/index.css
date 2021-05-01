@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#root {
+  background-color: bisque;
+  height: 100vh;
+}
+
+nav {
+  background-color: #fff;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 24px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #6e6d7a;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+nav a:hover {
+  color: #ea4c89;
+}

@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { Album, User, Photo } from "../common/types";
 import { Error } from "../components/Error";
 import "../assets/styles/main.css";
+import albumIcon from "../assets/images/album-icon.svg";
+import personIcon from "../assets/images/person-icon.svg";
 
 type ListAlbum = {
   albumId: number;
@@ -60,13 +62,12 @@ export function Main({ albums, users, photos, isFetching, isError }: Props) {
 
   return (
     <div className="main">
-      <div>
-        <input
-          type="text"
-          placeholder="Filter by Album Name or by User Name"
-          onChange={onFilterByAlbumName}
-        />
-      </div>
+      <input
+        className="filter"
+        type="text"
+        placeholder="Filter by Album Name or by User Name"
+        onChange={onFilterByAlbumName}
+      />
 
       {isFetching ? (
         <div>Fetching data...</div>
@@ -76,18 +77,19 @@ export function Main({ albums, users, photos, isFetching, isError }: Props) {
             <li key={idx}>
               <img src={album.thumbnail} alt={album.name} />
 
-              <div>
-                Album Name:
-                <br />
-                <Link to={`/albums/${album.albumId}?user=${album.user}`}>
-                  {album.name}
-                </Link>
-              </div>
+              <div className="info">
+                <div className="person">
+                  <img src={personIcon} alt="person-icon" />
+                  <Link to={`/users/${album.userId}`}>{album.user}</Link>
+                </div>
 
-              <div>
-                User Name:
-                <br />
-                <Link to={`/users/${album.userId}`}>{album.user}</Link>
+                <div className="album">
+                  <img src={albumIcon} alt="album-icon" />
+                  <Link to={`/albums/${album.albumId}?user=${album.user}`}>
+                    {album.name}
+                  </Link>
+                  <span className="tooltip">{album.name}</span>
+                </div>
               </div>
             </li>
           ))}

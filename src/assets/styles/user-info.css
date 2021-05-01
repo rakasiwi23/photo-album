@@ -1,0 +1,48 @@
+.user-info {
+  padding: 48px 16px 16px 16px;
+}
+
+.info-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.info-wrapper div {
+  display: flex;
+  align-items: center;
+  color: #0d0c22;
+}
+
+.info-wrapper img {
+  margin-right: 4px;
+  opacity: .8;
+}
+
+.user-info ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 48px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-info ul .title {
+  margin-bottom: 16px;
+}
+.user-info ul li {
+  margin-bottom: 6px;
+}
+.user-info ul li a {
+  text-decoration: none;
+  text-transform: capitalize;
+  color: #0d0c22;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.user-info ul li a:hover {
+  background-color: #ea4c89;
+  color: #fff;
+}

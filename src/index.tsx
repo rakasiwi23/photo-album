@@ -1,7 +1,12 @@
 import React, { useState, useMemo } from "react";
 import ReactDOM from "react-dom";
 import { useQueries } from "react-query";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink,
+} from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import { httpRequest } from "./utils";
@@ -108,9 +113,14 @@ function Index() {
 
   return (
     <Router>
-      <div>
-        <Link to="/favorite-photos">My Favorite Photos</Link>
-      </div>
+      <nav>
+        <NavLink exact to="/">
+          Home
+        </NavLink>
+        <NavLink exact to="/favorite-photos">
+          My Favorite Photos
+        </NavLink>
+      </nav>
 
       <Switch>
         <Route exact path="/">
