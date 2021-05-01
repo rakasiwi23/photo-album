@@ -35,6 +35,9 @@
   padding: 0 16px;
   width: 260px;
   margin: 0 auto;
+  color: #6e6d7a;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .info {
