@@ -27,6 +27,7 @@ export function UserInfo({ albums, users }: Props) {
   return (
     <div className="user-info">
       <div className="info-wrapper">
+        <div className="title-page">User</div>
         <div>
           <img src={personIcon} alt="person-icon" /> {matchedUser?.name}
         </div>
