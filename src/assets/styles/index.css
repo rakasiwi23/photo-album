@@ -22,13 +22,14 @@ nav {
   height: 80px;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 0 24px;
   gap: 24px;
 }
 
 nav a {
   text-decoration: none;
-  color: #6e6d7a;
+  color: #0d0c22;
   font-weight: 500;
   font-size: 14px;
 }
