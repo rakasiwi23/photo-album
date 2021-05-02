@@ -147,6 +147,8 @@ function Index() {
           <UserInfo
             users={usersRes.data as User[]}
             albums={albumsRes.data as Album[]}
+            isFetching={isFetching}
+            isError={isError}
           />
         </Route>
         <Route exact path="/favorite-photos">

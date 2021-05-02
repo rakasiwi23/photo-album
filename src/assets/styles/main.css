@@ -1,5 +1,5 @@
 .main {
-  padding: 48px 16px 16px 16px;
+  padding: 48px 24px;
   background-color: bisque;
 }
 
@@ -55,7 +55,7 @@
 
 .person img,
 .album img {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .person a,
@@ -94,6 +94,6 @@
   padding: 4px;
 }
 
-.album:hover .tooltip{
+.album:hover .tooltip {
   display: block;
 }

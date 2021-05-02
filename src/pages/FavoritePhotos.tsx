@@ -1,6 +1,8 @@
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 
 import { Album, Photo } from "../common/types";
+import "../assets/styles/favorite.css";
 
 type Props = {
   albums: Album[];
@@ -15,14 +17,20 @@ export function FavoritePhotos({ photos, albums }: Props) {
   return (
     <div className="favorite-photo">
       <ul>
-        {favoritePhotos.map((photo, idx) => (
-          <li key={idx}>
-            {photo.title}
-            <img src={photo.thumbnailUrl} alt={photo.title} />
-            From album:{" "}
-            {albums.find((album) => album.id === photo.albumId)?.title}
-          </li>
-        ))}
+        {favoritePhotos.length ? (
+          favoritePhotos.map((photo, idx) => (
+            <li key={idx}>
+              <div className="title">Name: {photo.title}</div>
+              <img src={photo.thumbnailUrl} alt={photo.title} />
+              <div className="album-title">
+                Album:{" "}
+                {albums.find((album) => album.id === photo.albumId)?.title}
+              </div>
+            </li>
+          ))
+        ) : (
+          <div>No Favorite Photos</div>
+        )}
       </ul>
     </div>
   );

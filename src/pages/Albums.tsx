@@ -1,8 +1,10 @@
-import { useMemo, useState, ChangeEvent } from "react";
+import { useEffect, useMemo, useState, ChangeEvent } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 
 import { Photo, User, PhotoComment } from "../common/types";
 import { Error } from "../components/Error";
+import "../assets/styles/albums.css";
+import emailIcon from "../assets/images/email-icon.svg";
 
 type Props = {
   photos: Photo[];
@@ -27,6 +29,10 @@ export function Albums({
 
   const [comment, setComment] = useState<string>("");
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
     setComment(value);
@@ -48,7 +54,11 @@ export function Albums({
     for (const photoWithComment of commentedPhotos) {
       if (photo.id === photoWithComment.photoId) {
         for (const [idx, comment] of photoWithComment.comments.entries()) {
-          comments.push(<div key={idx}>{comment}</div>);
+          comments.push(
+            <div className="comment" key={idx}>
+              {comment}
+            </div>,
+          );
         }
       }
     }
@@ -57,20 +67,25 @@ export function Albums({
   };
 
   if (isError) {
-    <Error />;
+    return <Error />;
   }
 
   return (
     <div className="albums">
+      <div className="title-page">Album</div>
+
       {isFetching ? (
-        <div>Fetching...</div>
+        <div className="fetching">Getting data...</div>
       ) : (
         <>
-          <div>
-            Photos by:{" "}
-            <Link to={`/users/${matchedUser.id}`}>{matchedUser.name}</Link>
-            <br />
-            Email: {matchedUser.email}
+          <div className="info-wrapper">
+            <div>
+              Photos by:
+              <Link to={`/users/${matchedUser.id}`}>{matchedUser.name}</Link>
+            </div>
+            <div>
+              <img src={emailIcon} alt="email-icon" /> {matchedUser.email}
+            </div>
           </div>
           <ul>
             {filteredPhotos.map((photo, idx) => (
@@ -80,16 +95,25 @@ export function Albums({
                   alt={photo.thumbnailUrl}
                   onClick={() => onSetFavoritePhoto(photo.id)}
                 />
-                <div>{photo.title}</div>
-                {photo.isFavorite ? "Favorite" : "Not Favorite"}
+                <div className="add-favorite">Favorite</div>
 
-                {renderComments(photo)}
+                <div className="title">{photo.title}</div>
+                {photo.isFavorite ? (
+                  <span className="favorite">Favorite</span>
+                ) : (
+                  ""
+                )}
+
+                <div className="comment-wrapper">
+                  <div className="title">Comments:</div>
+                  {renderComments(photo)}
+                </div>
 
                 <textarea
                   name="comment"
                   id="comment"
                   cols={30}
-                  rows={10}
+                  rows={3}
                   onChange={onChange}
                 />
                 <button onClick={() => onAddComment(photo.id, comment)}>

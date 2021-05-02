@@ -1,0 +1,38 @@
+.favorite-photo {
+  padding: 0 24px;
+  background-color: bisque;
+}
+
+.favorite-photo ul {
+  list-style: none;
+  padding: 0;
+  margin: 48px 0 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 36px;
+}
+
+.favorite-photo li {
+  text-transform: capitalize;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  border: 1px solid #888888;
+  padding: 16px;
+  border-radius: 8px;
+}
+.favorite-photo li img {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+}
+.favorite-photo li .title {
+  white-space: nowrap;
+  width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+  margin-left: auto;
+  margin-right: auto;
+}

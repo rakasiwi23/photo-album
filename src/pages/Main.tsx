@@ -57,43 +57,44 @@ export function Main({ albums, users, photos, isFetching, isError }: Props) {
   };
 
   if (isError) {
-    <Error />;
+    return <Error />;
   }
 
   return (
     <div className="main">
-      <input
-        className="filter"
-        type="text"
-        placeholder="Filter by Album Name or by User Name"
-        onChange={onFilterByAlbumName}
-      />
-
       {isFetching ? (
-        <div>Fetching data...</div>
+        <div className="fetching">Getting data...</div>
       ) : (
-        <ul>
-          {filteredAlbum.map((album, idx) => (
-            <li key={idx}>
-              <img src={album.thumbnail} alt={album.name} />
+        <>
+          <input
+            className="filter"
+            type="text"
+            placeholder="Search Album Name or User Name"
+            onChange={onFilterByAlbumName}
+          />
+          <ul>
+            {filteredAlbum.map((album, idx) => (
+              <li key={idx}>
+                <img src={album.thumbnail} alt={album.name} />
 
-              <div className="info">
-                <div className="person">
-                  <img src={personIcon} alt="person-icon" />
-                  <Link to={`/users/${album.userId}`}>{album.user}</Link>
-                </div>
+                <div className="info">
+                  <div className="person">
+                    <img src={personIcon} alt="person-icon" />
+                    <Link to={`/users/${album.userId}`}>{album.user}</Link>
+                  </div>
 
-                <div className="album">
-                  <img src={albumIcon} alt="album-icon" />
-                  <Link to={`/albums/${album.albumId}?user=${album.user}`}>
-                    {album.name}
-                  </Link>
-                  <span className="tooltip">{album.name}</span>
+                  <div className="album">
+                    <img src={albumIcon} alt="album-icon" />
+                    <Link to={`/albums/${album.albumId}?user=${album.user}`}>
+                      {album.name}
+                    </Link>
+                    <span className="tooltip">{album.name}</span>
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
