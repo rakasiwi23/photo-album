@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
 
 import { Album, Photo } from "../common/types";
 import "../assets/styles/favorite.css";
